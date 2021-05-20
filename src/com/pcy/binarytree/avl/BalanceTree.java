@@ -9,9 +9,9 @@ package com.pcy.binarytree.avl;
 public class BalanceTree {
 
 
-
     /**
      * 获取该节点的高度
+     *
      * @param node
      * @return
      */
@@ -54,11 +54,13 @@ public class BalanceTree {
         if (balance > 1 && value < node.left.value)
         //LL
         {
+            //直接右旋就能再次达到平衡
             return rightRotate(node);
         }
         if (balance < -1 && value > node.right.value)
         //RR
         {
+            //直接左旋就能再次达到平衡
             return leftRotate(node);
         }
         if (balance > 1 && value > node.left.value)
@@ -80,6 +82,40 @@ public class BalanceTree {
         return node;
     }
 
+    public static Node deleteNode(Node root, int value) {
+        if (root == null) {
+            return root;
+        }
+        if (value < root.value)
+        //在左子树上查找
+        {
+            root.left = deleteNode(root.left, value);
+        } else if (value > root.value)
+        //在右子树上查找
+        {
+            root.right = deleteNode(root.right, value);
+        } else {
+            if (root.left == null || root.right == null)
+            //待删除结点的左子树或右子树为空
+            {
+                if (root.left == null)
+                //无左子树的情形，直接将删除结点的父节点指向删除结点
+                //的右子树
+                {
+                    return root.right;
+                } else
+                //无右子树的情形，直接将删除节点的父节点指向删除节点的左子树
+                {
+                    return root.left;
+                }
+            } else {
+                //这里有两种方案可以解决：1.让删除节点左子树的最右侧节点代替当前节点。
+                //2.让删除节点右子树的最左侧节点代替当前节点。这里选择第一种方式来实现。
+                
+            }
+        }
+
+    }
 
 
     /**
@@ -108,6 +144,7 @@ public class BalanceTree {
 
     /**
      * 对结点node做左旋，处理之后node的父结点指向node的右节点
+     *
      * @param node
      * @return
      */
@@ -130,6 +167,7 @@ public class BalanceTree {
 
     /**
      * 在旋转完成之后，只有失衡结点和新父节点的高度会发生变化，所以只需要更新这两个节点的高度
+     *
      * @param node
      * @param childrenTreeRoot
      */
